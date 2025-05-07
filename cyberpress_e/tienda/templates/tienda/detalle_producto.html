@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto.nombre }} - Cyberpress_e</title>
+    <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .descripcion-cortada {
+            max-height: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .descripcion-cortada::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, white); /* Degradado para ocultar el texto */
+        }
+
+        .descripcion-completa {
+            display: none; /* Oculta la descripción completa inicialmente */
+        }
+
+        .ver-mas-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-weight: bold;
+            display: block; /* Asegura que el botón se muestre */
+            margin-top: 5px; /* Espacio entre el texto y el botón */
+        }
+
+        .ver-mas-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container producto-detalle">
+        <div class="producto-imagen-container">
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-imagen">
+            {% else %}
+                <p>No hay imagen disponible</p>
+            {% endif %}
+        </div>
+        <div class="producto-info">
+            <h1 class="producto-titulo">{{ producto.nombre }}</h1>
+            <p class="precio-detalle">${{ producto.precio }}</p>
+            <p class="estado-stock">
+                Estado: <span class="{% if producto.disponible %}disponible{% else %}no-disponible{% endif %}">{{ producto.get_disponible_display }}</span>
+                {% if producto.stock > 0 %}
+                    <span class="stock"> - Stock: {{ producto.stock }}</span>
+                {% else %}
+                    <span class="stock"> - Sin stock</span>
+                {% endif %}
+            </p>
+            <div class="botones-producto">
+                <button>Añadir al carrito</button>
+            </div>
+            <div class="descripcion-titulo">Descripción</div>
+            <div class="descripcion-cortada" id="descripcionCortada">
+                {{ producto.descripcion|linebreaksbr }}
+                {% if producto.descripcion|length > 15%}
+                    <button class="ver-mas-btn" onclick="mostrarDescripcion()">Ver más</button>
+                {% endif %}
+            </div>
+            <div class="descripcion-completa" id="descripcionCompleta">
+                {{ producto.descripcion|linebreaksbr }}
+                <button class="ver-mas-btn" onclick="ocultarDescripcion()">Ver menos</button>
+            </div>
+            <p class="volver-lista"><a href="{% url 'lista_productos' %}">Volver a la lista de productos</a></p>
+        </div>
+    </div>
+
+    <script>
+        function mostrarDescripcion() {
+            document.getElementById('descripcionCortada').style.display = 'none';
+            document.getElementById('descripcionCompleta').style.display = 'block';
+        }
+
+        function ocultarDescripcion() {
+            document.getElementById('descripcionCompleta').style.display = 'none';
+            document.getElementById('descripcionCortada').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

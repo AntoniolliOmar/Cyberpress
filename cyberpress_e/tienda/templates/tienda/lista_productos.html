@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Productos</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+</head>
+<body>
+    <h1>Nuestros Productos</h1>
+    <ul>
+        {% for producto in productos %}
+            <li><a href="{% url 'detalle_producto' producto.slug %}">{{ producto.nombre }}</a> - ${{ producto.precio }}</li>
+        {% empty %}
+            <li>No hay productos disponibles.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
