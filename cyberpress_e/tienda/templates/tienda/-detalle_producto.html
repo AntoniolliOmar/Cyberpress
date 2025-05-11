@@ -44,8 +44,8 @@
     </style>
 </head>
 <body>
+    <p><a href="{% url 'index' %}" class="volver-inicio">Volver al inicio</a></p>
     <div class="container producto-detalle">
-        <p><a href="{% url 'index' %}" class="volver-inicio">Volver al inicio</a></p>
         <div class="producto-imagen-container">
             {% if producto.imagen %}
                 <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-imagen">
@@ -68,16 +68,16 @@
                 <button>Añadir al carrito</button>
             </div>
             <div class="descripcion-titulo">Descripción</div>
-        <div class="descripcion-cortada" id="descripcionCortada">
-            {{ producto.descripcion|linebreaksbr }}
-            {% if producto.descripcion|length > 150 %}
-                <button class="ver-mas-btn" onclick="mostrarDescripcion()">Ver más</button>
-            {% endif %}
-        </div>
-        <div class="descripcion-completa" id="descripcionCompleta">
-            {{ producto.descripcion|linebreaksbr }}
-            <button class="ver-mas-btn" onclick="ocultarDescripcion()">Ver menos</button>
-        </div>
+            <div class="descripcion-cortada" id="descripcionCortada">
+                {{ producto.descripcion|linebreaksbr }}
+                {% if producto.descripcion|length > 15%}
+                    <button class="ver-mas-btn" onclick="mostrarDescripcion()">Ver más</button>
+                {% endif %}
+            </div>
+            <div class="descripcion-completa" id="descripcionCompleta">
+                {{ producto.descripcion|linebreaksbr }}
+                <button class="ver-mas-btn" onclick="ocultarDescripcion()">Ver menos</button>
+            </div>
             <p class="volver-lista"><a href="{% url 'lista_productos' %}">Volver a la lista de productos</a></p>
         </div>
     </div>

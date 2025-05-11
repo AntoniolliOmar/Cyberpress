@@ -1,18 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Lista de Productos</title>
-    {% load static %}
-<link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos - Cyberpress_e</title>
+    <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Nuestros Productos</h1>
-    <ul>
-        {% for producto in productos %}
-            <li><a href="{% url 'detalle_producto' producto.slug %}">{{ producto.nombre }}</a> - ${{ producto.precio }}</li>
-        {% empty %}
-            <li>No hay productos disponibles.</li>
-        {% endfor %}
-    </ul>
+    <div class="producto-lista-container">
+        <p><a href="{% url 'index' %}" class="volver-inicio">Volver al inicio</a></p>
+        <h1 class="lista-titulo">Nuestros Productos</h1>
+        <ul class="producto-lista">
+            {% for producto in productos %}
+                <li>
+                    <a href="{% url 'detalle_producto' producto.slug %}" class="producto-link">{{ producto.nombre }}</a>
+                    <span class="producto-precio">${{ producto.precio }}</span>
+                </li>
+            {% empty %}
+                <li class="sin-productos">No hay productos disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
