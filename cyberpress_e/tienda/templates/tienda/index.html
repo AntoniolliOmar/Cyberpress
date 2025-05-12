@@ -4,15 +4,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyberpress_e - Tu Tienda Online</title>
+    <title>Cyberpress</title>
     <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+   
 </head>
 <body>
-    <div class="container">
-        <h1>Bienvenido a Cyberpress_e</h1>
-        <p>¡Descubre nuestra increíble selección de productos!</p>
-        <p><a href="{% url 'lista_productos' %}">Ver todos los productos</a></p>
-        </div>
+    <div class="index-container">
+        <h1 class="index-titulo">Bienvenido a Cyberpress</h1>
+        <p class="index-descripcion">¡Descubre nuestras categorías y productos destacados!</p>
+
+        <section class="categorias-destacadas">
+            <h2 class="index-seccion-titulo">Categorías</h2>
+            <ul class="lista-categorias">
+                {% for categoria in categorias %}
+                    <li class="categoria-item">
+                        <a href="#">
+                            <div class="categoria-imagen-container" id="categoria-{{ categoria.id }}-images">
+                                {% for producto in categoria.producto_set.all %}
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url }}" alt="{{ categoria.nombre }} - {{ producto.nombre }}" style="opacity: {% if forloop.first %}1{% else %}0{% endif %}; position: absolute; top: 0; left: 0; transition: opacity 0.5s ease-in-out;">
+                                    {% else %}
+                                        {% if forloop.first %}
+                                            <img src="{% static 'tienda/img/placeholder.png' %}" alt="Sin imagen" style="opacity: 1; position: absolute; top: 0; left: 0; transition: opacity 0.5s ease-in-out;">
+                                        {% else %}
+                                            <img src="{% static 'tienda/img/placeholder.png' %}" alt="Sin imagen" style="opacity: 0; position: absolute; top: 0; left: 0; transition: opacity 0.5s ease-in-out;">
+                                        {% endif %}
+                                    {% endif %}
+                                {% empty %}
+                                    <div class="categoria-imagen-container">
+                                        <img src="{% static 'tienda/img/placeholder.png' %}" alt="Sin imagen" style="opacity: 1; transition: opacity 0.5s ease-in-out;">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <span>{{ categoria.nombre }}</span>
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No hay categorías disponibles.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="productos-destacados">
+            <h2 class="index-seccion-titulo">Productos Destacados</h2>
+            <ul class="lista-productos-destacados">
+                {% for producto in productos_destacados %}
+                    <li class="producto-destacado-item">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-destacado-imagen">
+                        {% endif %}
+                        <a href="{% url 'detalle_producto' producto.slug %}" class="producto-destacado-link">
+                            {{ producto.nombre }} - ${{ producto.precio }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No hay productos destacados disponibles.</li>
+                {% endfor %}
+            </ul>
+            <p class="ver-todos-productos"><a href="{% url 'lista_productos' %}" class="index-link-productos">Ver todos los productos</a></p>
+        </section>
+    </div>
+
+     <script>
+        const categoriaImagenesContainers = document.querySelectorAll('.categoria-imagen-container');
+
+        categoriaImagenesContainers.forEach(container => {
+            const images = container.querySelectorAll('img');
+            const visibleImagesCount = images.length;
+
+            if (visibleImagesCount > 1) {
+                let currentIndex = 0;
+                setInterval(() => {
+                    images[currentIndex].style.opacity = 0;
+                    currentIndex = (currentIndex + 1) % visibleImagesCount;
+                    images[currentIndex].style.opacity = 1;
+                }, 2000); // Cambiar cada 2 segundos
+            } else if (visibleImagesCount === 1) {
+                images[0].style.opacity = 1; // Asegurar que la única imagen sea visible
+            }
+        });
+    </script>
 </body>
 </html>

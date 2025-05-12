@@ -1,27 +1,30 @@
-{% load static %}
+   {% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Productos - Cyberpress_e</title>
-    <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 1 
+<title>Lista de Productos - Cyberpress_e</title>
+<link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="producto-lista-container">
-        <p><a href="{% url 'index' %}" class="volver-inicio">Volver al inicio</a></p>
-        <h1 class="lista-titulo">Nuestros Productos</h1>
-        <ul class="producto-lista">
-            {% for producto in productos %}
-                <li>
-                    <a href="{% url 'detalle_producto' producto.slug %}" class="producto-link">{{ producto.nombre }}</a>
-                    <span class="producto-precio">${{ producto.precio }}</span>
-                </li>
-            {% empty %}
-                <li class="sin-productos">No hay productos disponibles.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="producto-lista-container"> 2 
+<p><a href="{% url 'index' %}" class="volver-inicio">Volver al inicio</a></p>
+<h1 class="lista-titulo">Nuestros Productos</h1>
+<ul class="producto-lista">
+{% for producto in productos %}
+<li class="producto-item">
+{% if producto.imagen %}
+<img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-imagen-lista">
+{% endif %}
+<a href="{% url 'detalle_producto' producto.slug %}" class="producto-link">{{ producto.nombre }}</a>
+<span class="producto-precio">${{ producto.precio }}</span>
+</li>
+{% empty %}
+<li class="sin-productos">No hay productos disponibles.</li>
+{% endfor %}
+</ul>
+</div>
 </body>
-</html>
+</html

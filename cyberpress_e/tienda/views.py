@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from .models import Producto
+from .models import Producto, Categoria
 from django.shortcuts import render, get_object_or_404
 from django.urls import path
 from . import views
+from django.db.models import Prefetch
 
 
 def lista_productos(request):
@@ -18,9 +20,12 @@ def detalle_producto(request, slug):
     return render(request, 'tienda/detalle_producto.html', context)
 
 def index(request):
-    # Aquí puedes agregar lógica para obtener datos que quieras mostrar en la página principal
-    # Por ejemplo, los últimos productos, categorías destacadas, etc.
-    context = {}
+    categorias = Categoria.objects.prefetch_related('producto_set').all()
+    productos_destacados = Producto.objects.filter(disponible=True)[:8]
+    context = {
+        'categorias': categorias,
+        'productos_destacados': productos_destacados,
+    }
     return render(request, 'tienda/index.html', context)
 
 
